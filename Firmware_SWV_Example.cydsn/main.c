@@ -56,7 +56,6 @@
 #define SWV_CLK			6000u		/* The software requires SWV_CLK = 6000 kHz */
 
 #define SYNC_COUNT		0x0100		//0x07AF
-#define BAUD_DIVISOR	0x0000		//Serial output bit rate is SWV src clk / (BAUD_DIVISOR + 1)
 
 #if !(CY_PSOC3)
 /* PSoC5LP SWV stimulus register defines */
