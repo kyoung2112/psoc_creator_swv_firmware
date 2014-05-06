@@ -1,6 +1,6 @@
 /*******************************************************************************
 * File Name: CyLib.h
-* Version 4.10
+* Version 4.0
 *
 * Description:
 *  Provides the function definitions for the system, clocking, interrupts and
@@ -11,7 +11,7 @@
 *  Guide provided with PSoC Creator.
 *
 ********************************************************************************
-* Copyright 2008-2014, Cypress Semiconductor Corporation.  All rights reserved.
+* Copyright 2008-2013, Cypress Semiconductor Corporation.  All rights reserved.
 * You may use this file only in accordance with the license, terms, conditions,
 * disclaimers, and limitations in the end user license agreement accompanying
 * the software package with which this file was provided.
@@ -694,11 +694,11 @@ void CySetScPumps(uint8 enable) ;
     /* Interrupt Address Vector registers */
     #define CY_INT_VECT_TABLE           ((cyisraddress CYXDATA *) CYREG_INTC_VECT_MBASE)
 
-    /* Interrupt Controller Priority Registers */
+    /* Interrrupt Controller Priority Registers */
     #define CY_INT_PRIORITY_REG         (* (reg8 *) CYREG_INTC_PRIOR0)
     #define CY_INT_PRIORITY_PTR         (  (reg8 *) CYREG_INTC_PRIOR0)
 
-    /* Interrupt Controller Set Enable Registers */
+    /* Interrrupt Controller Set Enable Registers */
     #define CY_INT_ENABLE_REG           (* (reg8 *) CYREG_INTC_SET_EN0)
     #define CY_INT_ENABLE_PTR           (  (reg8 *) CYREG_INTC_SET_EN0)
 
@@ -714,7 +714,7 @@ void CySetScPumps(uint8 enable) ;
     #define CY_INT_SET_EN3_REG          (* (reg8 *) CYREG_INTC_SET_EN3)
     #define CY_INT_SET_EN3_PTR          (  (reg8 *) CYREG_INTC_SET_EN3)
 
-    /* Interrupt Controller Clear Enable Registers */
+    /* Interrrupt Controller Clear Enable Registers */
     #define CY_INT_CLEAR_REG            (* (reg8 *) CYREG_INTC_CLR_EN0)
     #define CY_INT_CLEAR_PTR            (  (reg8 *) CYREG_INTC_CLR_EN0)
 
@@ -731,11 +731,11 @@ void CySetScPumps(uint8 enable) ;
     #define CY_INT_CLR_EN3_PTR          (  (reg8 *) CYREG_INTC_CLR_EN3)
 
 
-    /* Interrupt Controller Set Pend Registers */
+    /* Interrrupt Controller Set Pend Registers */
     #define CY_INT_SET_PEND_REG         (* (reg8 *) CYREG_INTC_SET_PD0)
     #define CY_INT_SET_PEND_PTR         (  (reg8 *) CYREG_INTC_SET_PD0)
 
-    /* Interrupt Controller Clear Pend Registers */
+    /* Interrrupt Controller Clear Pend Registers */
     #define CY_INT_CLR_PEND_REG         (* (reg8 *) CYREG_INTC_CLR_PD0)
     #define CY_INT_CLR_PEND_PTR         (  (reg8 *) CYREG_INTC_CLR_PD0)
 
@@ -753,8 +753,8 @@ void CySetScPumps(uint8 enable) ;
 * Macro Name: CyAssert
 ********************************************************************************
 * Summary:
-*  The macro that evaluates the expression and if it is false (evaluates to 0)
-*  then the processor is halted.
+*  Macro that evaluates the expression and if it is false (evaluates to 0) then
+*  the processor is halted.
 *
 *  This macro is evaluated unless NDEBUG is defined.
 *
@@ -791,7 +791,7 @@ void CySetScPumps(uint8 enable) ;
 #define CY_RESET_GPIO1              (0x80u)
 
 
-/* Interrupt Controller Configuration and Status Register */
+/* Interrrupt Controller Configuration and Status Register */
 #if(CY_PSOC3)
     #define INTERRUPT_CSR               ((reg8 *) CYREG_INTC_CSR_EN)
     #define DISABLE_IRQ_SET             ((uint8)(0x01u << 1u))    /* INTC_CSR_EN */
@@ -1027,26 +1027,18 @@ void CySetScPumps(uint8 enable) ;
 
 
 /*******************************************************************************
-* The following code is OBSOLETE and must not be used.
-*
-* If the obsoleted macro definitions intended for use in the application use the
-* following scheme, redefine your own versions of these definitions:
-*    #ifdef <OBSOLETED_DEFINE>
-*        #undef  <OBSOLETED_DEFINE>
-*        #define <OBSOLETED_DEFINE>      (<New Value>)
-*    #endif
-*
-* Note: Redefine obsoleted macro definitions with caution. They might still be
-*       used in the application and their modification might lead to unexpected
-*       consequences.
+* Following code are OBSOLETE and must not be used.
 *******************************************************************************/
-
 #define CYGlobalIntEnable       CyGlobalIntEnable
 #define CYGlobalIntDisable      CyGlobalIntDisable
 
 #define cymemset(s,c,n)         memset((s),(c),(n))
 #define cymemcpy(d,s,n)         memcpy((d),(s),(n))
 
+
+/*******************************************************************************
+* Following code are OBSOLETE and must not be used starting from cy_boot 3.0
+*******************************************************************************/
 #define MFGCFG_X32_TR_PTR               (CY_CLK_XTAL32_TR_PTR)
 #define MFGCFG_X32_TR                   (CY_CLK_XTAL32_TR_REG)
 #define SLOWCLK_X32_TST_PTR             (CY_CLK_XTAL32_TST_PTR)
@@ -1131,6 +1123,10 @@ void CySetScPumps(uint8 enable) ;
 #define CY_VD_PRESISTENT_STATUS_PTR    (CY_VD_PERSISTENT_STATUS_PTR)
 
 
+/*******************************************************************************
+* Following code are OBSOLETE and must not be used starting from cy_boot 3.20
+*******************************************************************************/
+
 #if(CY_PSOC5)
 
     #define CYINT_IRQ_BASE      (CY_INT_IRQ_BASE)
@@ -1157,7 +1153,9 @@ void CySetScPumps(uint8 enable) ;
 #endif  /* (CY_PSOC5) */
 
 
-
+/*******************************************************************************
+* Following code are OBSOLETE and must not be used starting from cy_boot 3.30
+*******************************************************************************/
 #define BUS_AMASK_CLEAR                 (0xF0u)
 #define BUS_DMASK_CLEAR                 (0x00u)
 #define CLKDIST_LD_LOAD_SET             (0x01u)
@@ -1192,6 +1190,9 @@ void CySetScPumps(uint8 enable) ;
 #define CLKDIST_CR                     (*(reg8 *) CYREG_CLKDIST_CR)
 
 
+/*******************************************************************************
+* Following code are OBSOLETE and must not be used starting from cy_boot 3.50
+*******************************************************************************/
 #define IMO_PM_ENABLE                   (0x10u)
 #define PM_ACT_CFG0_PTR                ( (reg8 *) CYREG_PM_ACT_CFG0)
 #define PM_ACT_CFG0                    (*(reg8 *) CYREG_PM_ACT_CFG0)

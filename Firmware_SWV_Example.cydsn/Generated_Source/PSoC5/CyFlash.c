@@ -1,6 +1,6 @@
 /*******************************************************************************
 * File Name: CyFlash.c
-* Version 4.10
+* Version 4.0
 *
 *  Description:
 *   Provides an API for the FLASH/EEPROM.
@@ -13,7 +13,7 @@
 *   System Reference Guide provided with PSoC Creator.
 *
 ********************************************************************************
-* Copyright 2008-2014, Cypress Semiconductor Corporation. All rights reserved.
+* Copyright 2008-2013, Cypress Semiconductor Corporation. All rights reserved.
 * You may use this file only in accordance with the license, terms, conditions,
 * disclaimers, and limitations in the end user license agreement accompanying
 * the software package with which this file was provided.
@@ -23,7 +23,7 @@
 
 
 /*******************************************************************************
-* Holds the die temperature, updated by CySetTemp(). Used for flash writing.
+* Holds die temperature, updated by CySetTemp(). Used for flash writting.
 * The first byte is the sign of the temperature (0 = negative, 1 = positive).
 * The second byte is the magnitude.
 *******************************************************************************/
@@ -97,7 +97,7 @@ void CyFlash_Stop(void)
 *
 * Summary:
 *  Sends a command to the SPC to read the die temperature. Sets a global value
-*  used by the Write function. This function must be called once before
+*  used by the Write functions. This function must be called once before
 *  executing a series of Flash writing functions.
 *
 * Parameters:
@@ -158,8 +158,8 @@ static cystatus CySetTempInt(void)
 ********************************************************************************
 *
 * Summary:
-*  This is a wraparound for CySetTempInt(). It is used to return the second
-*  successful read of the temperature value.
+*  This is a wraparound for CySetTempInt(). It is used to return second
+*  successful read of temperature value.
 *
 * Parameters:
 *  None
@@ -171,7 +171,7 @@ static cystatus CySetTempInt(void)
 *   CYRET_UNKNOWN if there was an SPC error.
 *
 *  uint8 dieTemperature[2]:
-*   Holds the die temperature for the flash writing algorithm. The first byte is
+*   Holds die temperature for the flash writting algorithm. The first byte is
 *   the sign of the temperature (0 = negative, 1 = positive). The second byte is
 *   the magnitude.
 *
@@ -195,12 +195,12 @@ cystatus CySetTemp(void)
 *
 * Summary:
 *  Sets the user supplied temporary buffer to store SPC data while performing
-*  Flash and EEPROM commands. This buffer is only necessary when the Flash ECC is
+*  flash and EEPROM commands. This buffer is only necessary when Flash ECC is
 *  disabled.
 *
 * Parameters:
 *  buffer:
-*   The address of a block of memory to store temporary memory. The size of the block
+*   Address of block of memory to store temporary memory. The size of the block
 *   of memory is CYDEV_FLS_ROW_SIZE + CYDEV_ECC_ROW_SIZE.
 *
 * Return:
@@ -219,12 +219,10 @@ cystatus CySetFlashEEBuffer(uint8 * buffer)
 
         if(NULL == buffer)
         {
-            rowBuffer = rowBuffer;
             status = CYRET_BAD_PARAM;
         }
         else if(CySpcLock() != CYRET_SUCCESS)
         {
-            rowBuffer = rowBuffer;
             status = CYRET_LOCKED;
         }
         else
@@ -235,7 +233,7 @@ cystatus CySetFlashEEBuffer(uint8 * buffer)
 
     #else
 
-        /* To suppress warning */
+        /* To supress the warning */
         buffer = buffer;
 
     #endif  /* (CYDEV_ECC_ENABLE == 0u) */
@@ -327,7 +325,7 @@ cystatus CySetFlashEEBuffer(uint8 * buffer)
             {
                 rowSize = CYDEV_FLS_ROW_SIZE + CYDEV_ECC_ROW_SIZE;
 
-                /* Save ECC area. */
+                /* Save the ECC area. */
                 offset = CYDEV_ECC_BASE +
                         ((uint32)arrayId * CYDEV_ECC_SECTOR_SIZE) +
                         ((uint32)rowAddress * CYDEV_ECC_ROW_SIZE);
@@ -338,7 +336,7 @@ cystatus CySetFlashEEBuffer(uint8 * buffer)
                 }
             }
 
-            /* Copy rowdata to temporary buffer. */
+            /* Copy the rowdata to the temporary buffer. */
         #if(CY_PSOC3)
             (void) memcpy((void *) rowBuffer, (void *)((uint32) rowData), (int16) CYDEV_FLS_ROW_SIZE);
         #else
@@ -365,7 +363,7 @@ cystatus CySetFlashEEBuffer(uint8 * buffer)
     ********************************************************************************
     *
     * Summary:
-    *  Sends a command to the SPC to load and program a row of config data in the Flash.
+    *  Sends a command to the SPC to load and program a row of config data in flash.
     *  This function is only valid for Flash array IDs (not for EEPROM).
     *
     * Parameters:
@@ -373,8 +371,8 @@ cystatus CySetFlashEEBuffer(uint8 * buffer)
     *   The arrays in the part are sequential starting at the first ID for the
     *   specific memory type. The array ID for the Flash memory lasts
     *   from 0x00 to 0x3F.
-    *  rowAddress:   The address of the sector to erase.
-    *  rowECC:       The array of bytes to write.
+    *  rowAddress:   Address of the sector to erase.
+    *  rowECC:       Array of bytes to write.
     *
     * Return:
     *  status:
@@ -394,7 +392,7 @@ cystatus CySetFlashEEBuffer(uint8 * buffer)
         /* Check whether rowBuffer pointer has been initialized by CySetFlashEEBuffer() */
         if(NULL != rowBuffer)
         {
-            /* Read existing flash data. */
+            /* Read the existing flash data. */
             offset = ((uint32)arrayId * CYDEV_FLS_SECTOR_SIZE) +
                      ((uint32)rowAddress * CYDEV_FLS_ROW_SIZE);
 
@@ -435,7 +433,7 @@ cystatus CySetFlashEEBuffer(uint8 * buffer)
 * Function Name: CyWriteRowFull
 ********************************************************************************
 * Summary:
-*  Sends a command to the SPC to load and program a row of data in the Flash.
+*  Sends a command to the SPC to load and program a row of data in flash.
 *  rowData array is expected to contain Flash and ECC data if needed.
 *
 * Parameters:
@@ -481,7 +479,7 @@ cystatus CyWriteRowFull(uint8 arrayId, uint16 rowNumber, const uint8* rowData, u
 
             if(CYRET_SUCCESS == status)
             {
-                /* Erase and program flash with data from SPC interval latch */
+                /* Erase and program flash with the data from SPC interval latch */
                 status = CySpcWriteRow(arrayId, rowNumber, dieTemperature[0u], dieTemperature[1u]);
 
                 if(CYRET_STARTED == status)
@@ -523,9 +521,9 @@ cystatus CyWriteRowFull(uint8 arrayId, uint16 rowNumber, const uint8* rowData, u
 *
 * Summary:
 *  Sets the number of clock cycles the cache will wait before it samples data
-*  coming back from the Flash. This function must be called before increasing the CPU
-*  clock frequency. It can optionally be called after lowering the CPU clock
-*  frequency in order to improve the CPU performance.
+*  coming back from Flash. This function must be called before increasing CPU
+*  clock frequency. It can optionally be called after lowering CPU clock
+*  frequency in order to improve CPU performance.
 *
 * Parameters:
 *  uint8 freq:
@@ -544,7 +542,7 @@ void CyFlash_SetWaitCycles(uint8 freq)
 
     /***************************************************************************
     * The number of clock cycles the cache will wait before it samples data
-    * coming back from the Flash must be equal or greater to to the CPU frequency
+    * coming back from Flash must be equal or greater to to the CPU frequency
     * outlined in clock cycles.
     ***************************************************************************/
 
@@ -663,10 +661,10 @@ void CyEEPROM_Stop (void)
 *******************************************************************************/
 void CyEEPROM_ReadReserve(void) 
 {
-    /* Make request for PHUB to have access */
-    CY_FLASH_EE_SCR_REG |= CY_FLASH_EE_SCR_AHB_EE_REQ;
+    /* Make a request for PHUB to have access */
+    *CY_FLASH_EE_SCR_PTR |= CY_FLASH_EE_SCR_AHB_EE_REQ;
 
-    while (0u == (CY_FLASH_EE_SCR_REG & CY_FLASH_EE_SCR_AHB_EE_ACK))
+    while (0u == (*CY_FLASH_EE_SCR_PTR & CY_FLASH_EE_SCR_AHB_EE_ACK))
     {
         /* Wait for acknowledgement from PHUB */
     }
@@ -689,7 +687,7 @@ void CyEEPROM_ReadReserve(void)
 *******************************************************************************/
 void CyEEPROM_ReadRelease(void) 
 {
-    CY_FLASH_EE_SCR_REG &= (uint8)(~CY_FLASH_EE_SCR_AHB_EE_REQ);
+    *CY_FLASH_EE_SCR_PTR |= 0x00u;
 }
 
 

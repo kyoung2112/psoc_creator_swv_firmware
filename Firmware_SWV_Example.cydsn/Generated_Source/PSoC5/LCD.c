@@ -1,6 +1,6 @@
 /*******************************************************************************
 * File Name: LCD.c
-* Version 1.90
+* Version 2.0
 *
 * Description:
 *  This file provides source code for the Character LCD component's API.
@@ -8,7 +8,7 @@
 * Note:
 *
 ********************************************************************************
-* Copyright 2008-2012, Cypress Semiconductor Corporation.  All rights reserved.
+* Copyright 2008-2014, Cypress Semiconductor Corporation.  All rights reserved.
 * You may use this file only in accordance with the license, terms, conditions,
 * disclaimers, and limitations in the end user license agreement accompanying
 * the software package with which this file was provided.
@@ -21,8 +21,8 @@
 static void LCD_WrDatNib(uint8 nibble) ;
 static void LCD_WrCntrlNib(uint8 nibble) ;
 
-/* Stores the state of conponent. Indicates wherewer component is 
-* in enable state or not.
+/* Stores state of component. Indicates whether component is or not
+* in the enable state.
 */
 uint8 LCD_enableState = 0u;
 
@@ -34,13 +34,13 @@ uint8 LCD_initVar = 0u;
 ********************************************************************************
 *
 * Summary:
-*  Perform initialization required for components normal work.
+*  Perform initialization required for the components normal work.
 *  This function initializes the LCD hardware module as follows:
-*        Enable 4-bit interface
-*        Clear the display
-*        Enable auto cursor increment
+*        Enables a 4-bit interface
+*        Clears the display
+*        Enables the auto cursor increment
 *        Resets the cursor to start position
-*  Also loads custom character set to LCD if it was defined in the customizer.
+*  Also, it loads a custom character set to the LCD if it was defined in the customizer.
 *
 * Parameters:
 *  None.
@@ -97,7 +97,7 @@ void LCD_Init(void)
 *  No.
 *
 * Theory:
-*  This finction has no effect when it called first time as
+*  This function has no effect when it is called the first time as
 *  LCD_Init() turns on the LCD.
 *
 *******************************************************************************/
@@ -113,14 +113,14 @@ void LCD_Enable(void)
 ********************************************************************************
 *
 * Summary:
-*  Perform initialization required for components normal work.
+*  Perform initialization required for the components normal work.
 *  This function initializes the LCD hardware module as follows:
-*        Enable 4-bit interface
-*        Clear the display
-*        Enable auto cursor increment
+*        Enables 4-bit interface
+*        Clears the display
+*        Enables auto cursor increment
 *        Resets the cursor to start position
-*  Also loads custom character set to LCD if it was defined in the customizer.
-*  If it was not the first call in this project then it just turns on the
+*  Also, it loads a custom character set to the LCD if it was defined in the customizer.
+*  If it was not the first call in this project, then it just turns on the
 *  display
 *
 *
@@ -136,7 +136,7 @@ void LCD_Enable(void)
 *******************************************************************************/
 void LCD_Start(void) 
 {
-    /* If not initialized then perform initialization */
+    /* If not initialized, perform initialization */
     if(LCD_initVar == 0u)
     {
         LCD_Init();
@@ -178,18 +178,18 @@ void LCD_Stop(void)
 ********************************************************************************
 *
 * Summary:
-*  Moves active cursor location to a point specified by the input arguments
+*  Moves the active cursor location to a point specified by the input arguments
 *
 * Parameters:
-*  row:     Specific row of LCD module to be written
-*  column:  Column of LCD module to be written
+*  row:    Specific row of LCD module to be written
+*  column: Column of LCD module to be written
 *
 * Return:
 *  None.
 *
 * Note:
-*  This only applies for LCD displays which use the 2X40 address mode.
-*  This results in Row 2 offset from row one by 0x28.
+*  This only applies for LCD displays that use the 2X40 address mode.
+*  In this case Row 2 starts with 0x28 offset from Row 1.
 *  When there are more than 2 rows, each row must be fewer than 20 characters.
 *
 *******************************************************************************/
@@ -224,7 +224,7 @@ void LCD_Position(uint8 row, uint8 column)
 *  Writes a zero terminated string to the LCD.
 *
 * Parameters:
-*  string:  pointer to head of char8 array to be written to the LCD module
+*  string: Pointer to head of char8 array to be written to the LCD module
 *
 * Return:
 *  None.
@@ -255,7 +255,7 @@ void LCD_PrintString(char8 const string[])
 *  _CUSTOM_7) are acceptable as inputs.
 *
 * Parameters:
-*  character:  character to be written to the LCD
+*  character: Character to be written to LCD
 *
 * Return:
 *  None.
@@ -275,7 +275,7 @@ void LCD_PutChar(char8 character)
 *  Writes a data byte to the LCD module's Data Display RAM.
 *
 * Parameters:
-*  dByte:  byte to be written to LCD module.
+*  dByte: Byte to be written to the LCD module
 *
 * Return:
 *  None.
@@ -305,8 +305,8 @@ void LCD_WriteData(uint8 dByte)
 *  Writes a command byte to the LCD module.
 *
 * Parameters:
-*  cByte:   byte to be written to LCD module.
-*
+*  cByte:  The byte to be written to theLCD module
+* 
 * Return:
 *  None.
 *
@@ -333,7 +333,7 @@ void LCD_WriteControl(uint8 cByte)
 ********************************************************************************
 *
 * Summary:
-*  Polls LCD until the ready bit is set.
+*  Polls the LCD until the ready bit is set.
 *
 * Parameters:
 *  None.
@@ -342,18 +342,18 @@ void LCD_WriteControl(uint8 cByte)
 *  None.
 *
 * Note:
-*  Changes pins to High-Z.
+*  Changes the pins to High-Z.
 *
 *******************************************************************************/
 void LCD_IsReady(void) 
 {
     uint8 value;
 
-    /* Clear the LCD port*/
+    /* Clear LCD port*/
     LCD_PORT_DR_REG &= ((uint8)(~LCD_PORT_MASK));
 
-    /* PSoC4 has a bit different port/pin organization for setting Drive Modes than
-    * PSoC3/5.
+    /* PSoC4 has a little different from PSoC3/5 port/pin organization for setting Drive Modes.
+  
     */
     #if (CY_PSOC4)
         
@@ -397,7 +397,7 @@ void LCD_IsReady(void)
         /* Set E high */
         LCD_PORT_DR_REG |= LCD_E;
 
-        /* 360 ns delay the setup time for data pins */
+        /* 360 ns delay setup time for data pins */
         CyDelayUs(1u);
 
         /* Get port state */
@@ -406,13 +406,13 @@ void LCD_IsReady(void)
         /* Set enable low */
         LCD_PORT_DR_REG &= ((uint8)(~LCD_E));
 
-        /* This gives a true delay between disably Enable bit and poling Ready bit */
+        /* This gives true delay between disabling Enable bit and polling Ready bit */
         CyDelayUs(0u);
 
         /* Extract ready bit */
         value &= LCD_READY_BIT;
 
-        /* Set E high as we in 4-bit interface we need extra oparation */
+        /* Set E high as we in 4-bit interface we need extra operation */
         LCD_PORT_DR_REG |= LCD_E;
 
         /* 360 ns delay the setup time for data pins */
@@ -428,7 +428,7 @@ void LCD_IsReady(void)
     /* Set R/W low to write */
     LCD_PORT_DR_REG &= ((uint8)(~LCD_RW));
 
-    /* Clear the LCD port*/
+    /* Clear LCD port*/
     LCD_PORT_DR_REG &= ((uint8)(~LCD_PORT_MASK));
 
     #if (CY_PSOC4)
@@ -467,7 +467,7 @@ void LCD_IsReady(void)
 *  Writes a data nibble to the LCD module.
 *
 * Parameters:
-*  nibble:  byte containing nibble in least significant nibble to be written
+*  nibble:  Byte containing nibble in least significant nibble to be written
 *           to LCD module.
 *
 * Return:
@@ -476,18 +476,18 @@ void LCD_IsReady(void)
 *******************************************************************************/
 static void LCD_WrDatNib(uint8 nibble) 
 {
-    LCD_IsReady();
-
-    /* RS shoul be low to select data register */
+    /* RS should be low to select data register */
     LCD_PORT_DR_REG |= LCD_RS;
     /* Reset RW for write operation */
     LCD_PORT_DR_REG &= ((uint8)(~LCD_RW));
 
-    /* Two following lines of code will provide us with 40ns delay */
+    /* Guaranteed delay between Setting RS and RW and setting E bits */
+    CyDelayUs(0u);
+    
     /* Clear data pins */
     LCD_PORT_DR_REG &= ((uint8)(~LCD_DATA_MASK));
 
-    /* Write in data, bring E high*/
+    /* Write data, bring E high */
     #if(0u != LCD_PORT_SHIFT) /* MISRA forbids shift by 0 so need to handle that */
         LCD_PORT_DR_REG |= 
             (LCD_E | ((uint8)(((uint8) nibble) << LCD_PORT_SHIFT)));
@@ -510,8 +510,7 @@ static void LCD_WrDatNib(uint8 nibble)
 *  Writes a control nibble to the LCD module.
 *
 * Parameters:
-*  nibble:  byte containing nibble in least significant nibble to be written
-*           to LCD module.
+*  nibble: The byte containing a nibble in the four least significant bits.????
 *
 * Return:
 *  None.
@@ -519,10 +518,10 @@ static void LCD_WrDatNib(uint8 nibble)
 *******************************************************************************/
 static void LCD_WrCntrlNib(uint8 nibble) 
 {
-    /* RS and RW shoul be low to select instruction register and  write operation respectively */
+    /* RS and RW should be low to select instruction register and  write operation respectively */
     LCD_PORT_DR_REG &= ((uint8)(~(LCD_RS | LCD_RW)));
 
-    /* Two following lines of code will give provide ua with 40ns delay */
+    /* Two following lines of code will give 40ns delay */
     /* Clear data pins */
     LCD_PORT_DR_REG &= ((uint8)(~LCD_DATA_MASK));
 
@@ -551,7 +550,7 @@ static void LCD_WrCntrlNib(uint8 nibble)
     *  Print a byte as two ASCII characters.
     *
     * Parameters:
-    *  value:  The byte to be printed out as ASCII characters.
+    *  value: The byte to be printed out as ASCII characters.
     *
     * Return:
     *  None.
@@ -574,7 +573,7 @@ static void LCD_WrCntrlNib(uint8 nibble)
     *  Print a uint16 as four ASCII characters.
     *
     * Parameters:
-    *  value:   The uint16 to be printed out as ASCII characters.
+    *  value: The uint16 to be printed out as ASCII characters.
     *
     * Return:
     *  None.
@@ -586,60 +585,109 @@ static void LCD_WrCntrlNib(uint8 nibble)
         LCD_PrintInt8((uint8)(value & LCD_U16_LOWER_BYTE_MASK));
     }
 
-
+    
+    /*******************************************************************************
+    *  Function Name: LCD_PrintInt32
+    ********************************************************************************
+    *
+    * Summary:
+    *  Print a uint32 hexadecimal number as eight ASCII characters.
+    *
+    * Parameters:
+    *  value: The uint32 to be printed out as ASCII characters.
+    *
+    * Return:
+    *  None.
+    *
+    *******************************************************************************/
+    void LCD_PrintInt32(uint32 value) 
+    {
+        uint8 shift = LCD_32_BIT_SHIFT;
+        
+        while (shift != 0u)
+        {
+            /* "shift" var should be subtracted by 8 prior shifting. This implements 
+            * shifting by 24, 16, 8 and 0u. 
+            */
+            shift -= LCD_8_BIT_SHIFT;
+            
+            /* Print 8 bits of uint32 hex number */
+            LCD_PrintInt8((uint8) ((uint32) (value >> shift)));
+        }
+    }
+    
+    
     /*******************************************************************************
     *  Function Name: LCD_PrintNumber
+    ********************************************************************************
+    *
+    * Summary:
+    *  Print an uint16 value as a left-justified decimal value.
+    *
+    * Parameters:
+    *  value: A 16-bit value to be printed in ASCII characters as a decimal number
+    *
+    * Return:
+    *  None.
+    *
+    * Note:
+    *  This function is implemented as a macro.
+    *
+    *******************************************************************************/
+
+    
+    /*******************************************************************************
+    *  Function Name: LCD_PrintU32Number
     ********************************************************************************
     *
     * Summary:
     *  Print an uint32 value as a left-justified decimal value.
     *
     * Parameters:
-    *  value:  The byte to be printed out as ASCII characters.
+    *  value: A 32-bit value to be printed in ASCII characters as a decimal number
     *
     * Return:
     *  None.
     *
     *******************************************************************************/
-    void LCD_PrintNumber(uint16 value) 
+    void LCD_PrintU32Number(uint32 value) 
     {
-
-        char8 number[LCD_NUMBER_OF_REMAINDERS];
-        char8 temp[LCD_NUMBER_OF_REMAINDERS];
-
-        uint8 digIndex = 0u;
-        uint8 numDigits;
-
+        uint8 tmpDigit;
+        char8 number[LCD_NUMBER_OF_REMAINDERS_U32 + 1u];
+        uint8 digIndex = LCD_NUMBER_OF_REMAINDERS_U32;
+        
+        /* This API will output a decimal number as a string and that string will be 
+        * filled from end to start. Set Null termination character first.
+        */
+        number[digIndex] = (char8) '\0';
+        digIndex--;
+        
         /* Load these in reverse order */
         while(value >= LCD_TEN)
         {
-            temp[digIndex] = (value % LCD_TEN) + '0';
+            /* Extract decimal digit, indexed by 'digIndex', from 'value' and
+            * convert it to ASCII character.
+            */
+            tmpDigit = (uint8) (((uint8) (value % LCD_TEN)) + (uint8) LCD_ZERO_CHAR_ASCII);
+            
+            /* Temporary variable 'tmpDigit' is used to avoid Violation of MISRA rule 
+            * #10.3.
+            */
+            number[digIndex] = (char8) tmpDigit;
             value /= LCD_TEN;
-            digIndex++;
-        }
-
-        temp[digIndex] = (value % LCD_TEN) + '0';
-        numDigits = digIndex;
-
-        /* While index is greater than or equal to zero copy number
-        * from temporary array to number[].
-        */
-        while (digIndex != 0u)
-        {
-            number[numDigits - digIndex] = temp[digIndex];
             digIndex--;
         }
         
-        /* Copy last digit */
-        number[numDigits] = temp[0u];
-
-        /* Null Termination */
-        number[numDigits + 1u] = (char8) '\0';
+        /* Extract last decimal digit 'digIndex', from the 'value' and convert it
+        * to ASCII character.
+        */
+        tmpDigit = (uint8) (((uint8)(value % LCD_TEN)) + (uint8) LCD_ZERO_CHAR_ASCII);
+        number[digIndex] = (char8) tmpDigit;
 
         /* Print out number */
-        LCD_PrintString(&number[0u]);
+        LCD_PrintString(&number[digIndex]);
     }
-
+    
 #endif /* LCD_CONVERSION_ROUTINES == 1u */
 
 

@@ -1,6 +1,6 @@
 /*******************************************************************************
 * File Name: LCD.h
-* Version 1.90
+* Version 2.0
 *
 * Description:
 *  This header file contains registers and constants associated with the
@@ -9,7 +9,7 @@
 * Note:
 *
 ********************************************************************************
-* Copyright 2008-2012, Cypress Semiconductor Corporation.  All rights reserved.
+* Copyright 2008-2014, Cypress Semiconductor Corporation.  All rights reserved.
 * You may use this file only in accordance with the license, terms, conditions,
 * disclaimers, and limitations in the end user license agreement accompanying
 * the software package with which this file was provided.
@@ -92,8 +92,10 @@ void LCD_Wakeup(void) ;
     /* ASCII Conversion Routines */
     void LCD_PrintInt8(uint8 value) ;
     void LCD_PrintInt16(uint16 value) ;
+    void LCD_PrintInt32(uint32 value) ;
     void LCD_PrintNumber(uint16 value) ; 
-
+    void LCD_PrintU32Number(uint32 value) ;
+    
 #endif /* LCD_CONVERSION_ROUTINES == 1u */
 
 /* Clear Macro */
@@ -104,6 +106,8 @@ void LCD_Wakeup(void) ;
 
 /* On Macro */
 #define LCD_DisplayOn() LCD_WriteControl(LCD_DISPLAY_ON_CURSOR_OFF)
+
+#define LCD_PrintNumber(value) LCD_PrintU32Number((uint16) (value))
 
 
 /***************************************
@@ -134,6 +138,8 @@ extern uint8 const CYCODE LCD_customFonts[64u];
 #define LCD_CURSOR_BLINK             (0x0Fu)
 #define LCD_CURSOR_SH_LEFT           (0x10u)
 #define LCD_CURSOR_SH_RIGHT          (0x14u)
+#define LCD_DISPLAY_SCRL_LEFT        (0x18u)
+#define LCD_DISPLAY_SCRL_RIGHT       (0x1Eu)
 #define LCD_CURSOR_HOME              (0x02u)
 #define LCD_CURSOR_LEFT              (0x04u)
 #define LCD_CURSOR_RIGHT             (0x06u)
@@ -149,8 +155,11 @@ extern uint8 const CYCODE LCD_customFonts[64u];
 #define LCD_CHARACTER_HEIGHT         (0x08u)
 
 #if(LCD_CONVERSION_ROUTINES == 1u)
-    #define LCD_NUMBER_OF_REMAINDERS (0x05u)
-    #define LCD_TEN                  (0x0Au)
+    #define LCD_NUMBER_OF_REMAINDERS_U32 (0x0Au)
+    #define LCD_TEN                      (0x0Au)
+    #define LCD_8_BIT_SHIFT              (8u)
+    #define LCD_32_BIT_SHIFT             (32u)
+    #define LCD_ZERO_CHAR_ASCII          (48u)
 #endif /* LCD_CONVERSION_ROUTINES == 1u */
 
 /* Nibble Offset and Mask */
@@ -228,16 +237,19 @@ extern uint8 const CYCODE LCD_customFonts[64u];
 
 #if (CY_PSOC4)
 
-    /* Hi-Z Digital is defined by value of "001b" and this should be set for
-    * four data pins in this way we get - 0x00000249. Similar Strong drive
-    * is defibed by "110b" so we get 0x00000DB6.
+    #define LCD_DM_PIN_STEP              (3u)
+    /* Hi-Z Digital is defined by the value of "001b" and this should be set for
+    * four data pins, in this way we get - 0x00000249. A similar Strong drive
+    * is defined with "110b" so we get 0x00000DB6.
     */
-    #define LCD_HIGH_Z_DATA_DM           (0x00000249ul)
-    #define LCD_STRONG_DATA_DM           (0x00000DB6ul)
+    #define LCD_HIGH_Z_DATA_DM           ((0x00000249ul) << (LCD_PORT_SHIFT *\
+                                                                          LCD_DM_PIN_STEP))
+    #define LCD_STRONG_DATA_DM           ((0x00000DB6ul) << (LCD_PORT_SHIFT *\
+                                                                          LCD_DM_PIN_STEP))
     #define LCD_DATA_PINS_MASK           (0x00000FFFul)
-    #define LCD_DM_DATA_MASK             ((uint32)(LCD_DATA_PINS_MASK << \
-                                                          (LCD_PORT_SHIFT * 3u)))
-    
+    #define LCD_DM_DATA_MASK             ((uint32) (LCD_DATA_PINS_MASK << \
+                                                      (LCD_PORT_SHIFT * LCD_DM_PIN_STEP)))
+
 #else
 
     /* Drive Mode register values for High Z */
@@ -281,8 +293,8 @@ extern uint8 const CYCODE LCD_customFonts[64u];
 *       Obsolete function names
 ***************************************/
 #if(LCD_CONVERSION_ROUTINES == 1u)
-    /* This function names are obsolete an they will be removed in future 
-    * revisions of component.
+    /* This function names are obsolete and will be removed in future 
+    * revisions of the component.
     */
     #define LCD_PrintDecUint16(x)   LCD_PrintNumber(x)  
     #define LCD_PrintHexUint8(x)    LCD_PrintInt8(x)

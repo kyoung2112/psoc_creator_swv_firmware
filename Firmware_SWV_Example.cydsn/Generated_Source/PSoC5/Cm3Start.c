@@ -1,12 +1,12 @@
 /*******************************************************************************
 * File Name: Cm3Start.c
-* Version 4.10
+* Version 4.0
 *
 *  Description:
 *  Startup code for the ARM CM3.
 *
 ********************************************************************************
-* Copyright 2008-2014, Cypress Semiconductor Corporation. All rights reserved.
+* Copyright 2008-2013, Cypress Semiconductor Corporation. All rights reserved.
 * You may use this file only in accordance with the license, terms, conditions,
 * disclaimers, and limitations in the end user license agreement accompanying
 * the software package with which this file was provided.
@@ -76,7 +76,7 @@ cyisraddress CyRamVectors[CY_NUM_VECTORS];
 ********************************************************************************
 *
 * Summary:
-*  This function is called for all interrupts, other than a reset that gets
+*  This function is called for all interrupts, other than reset, that get
 *  called before the system is setup.
 *
 * Parameters:
@@ -95,7 +95,7 @@ CY_ISR(IntDefaultHandler)
     while(1)
     {
         /***********************************************************************
-        * We must not get here. If we do, a serious problem occurs, so go
+        * We should never get here. If we do, a serious problem occured, so go
         * into an infinite loop.
         ***********************************************************************/
     }
@@ -104,7 +104,7 @@ CY_ISR(IntDefaultHandler)
 
 #if defined(__ARMCC_VERSION)
 
-/* Local function for device reset. */
+/* Local function for the device reset. */
 extern void Reset(void);
 
 /* Application entry point. */
@@ -161,7 +161,7 @@ void Reset(void)
 ********************************************************************************
 *
 * Summary:
-*  This function is called immediately before the users main
+*  This function is called imediatly before the users main
 *
 * Parameters:
 *  None
@@ -179,7 +179,7 @@ void $Sub$$main(void)
 
     while (1)
     {
-        /* If main returns, it is undefined what we should do. */
+        /* If main returns it is undefined what we should do. */
     }
 }
 
@@ -193,7 +193,7 @@ extern void __cy_stack(void);
 /* Application entry point. */
 extern int main(void);
 
-/* Static objects constructors initializer */
+/* The static objects constructors initializer */
 extern void __libc_init_array(void);
 
 typedef unsigned char __cy_byte_align8 __attribute ((aligned (8)));
@@ -252,7 +252,7 @@ void Reset(void)
 __attribute__((weak))
 void _exit(int status)
 {
-    /* Cause divide by 0 exception */
+    /* Cause a divide by 0 exception */
     int x = status / INT_MAX;
     x = 4 / x;
 
@@ -267,7 +267,7 @@ void _exit(int status)
 *
 * Summary:
 *  This function handles initializing the .data and .bss sections in
-*  preparation for running the standard C code.  Once initialization is complete
+*  preperation for running standard C code.  Once initialization is complete
 *  it will call main(). This function will never return.
 *
 * Parameters:
@@ -320,8 +320,8 @@ void Start_c(void)
 ********************************************************************************
 *
 * Summary:
-*  This function performs early initializations for the IAR Embedded
-*  Workbench IDE. It is executed in the context of a reset interrupt handler
+*  This function perform early initializations for the IAR Embedded
+*  Workbench IDE. It is executed in the context of reset interrupt handler
 *  before the data sections are initialized.
 *
 * Parameters:
@@ -383,14 +383,14 @@ int __low_level_init(void)
     const cyisraddress RomVectors[CY_NUM_ROM_VECTORS] =
 #endif  /* defined (__ICCARM__) */
 {
-    INITIAL_STACK_POINTER,   /* Initial stack pointer  0 */
-    #if defined (__ICCARM__) /* Reset handler          1 */
+    INITIAL_STACK_POINTER,   /* The initial stack pointer  0 */
+    #if defined (__ICCARM__) /* The reset handler          1 */
         __iar_program_start,
     #else
         (cyisraddress)&Reset,
     #endif  /* defined (__ICCARM__) */
-    &IntDefaultHandler,      /* NMI handler            2 */
-    &IntDefaultHandler,      /* Hard fault handler     3 */
+    &IntDefaultHandler,      /* The NMI handler            2 */
+    &IntDefaultHandler,      /* The hard fault handler     3 */
 };
 
 #if defined(__ARMCC_VERSION)
@@ -438,7 +438,7 @@ void initialize_psoc(void)
     /* Was stored in CFGMEM to avoid being cleared while SRAM gets cleared */
     CyResetStatus = CY_GET_REG8(CYREG_PHUB_CFGMEM23_CFG1);
 
-    /* Point NVIC at RAM vector table. */
+    /* Point NVIC at the RAM vector table. */
     *CYINT_VECT_TABLE = CyRamVectors;
 
     /* Initialize the configuration registers. */
@@ -446,7 +446,7 @@ void initialize_psoc(void)
 
     #if(0u != DMA_CHANNELS_USED__MASK0)
 
-        /* Setup DMA - only necessary if design contains DMA component. */
+        /* Setup DMA - only necessary if the design contains a DMA component. */
         CyDmacConfigure();
 
     #endif  /* (0u != DMA_CHANNELS_USED__MASK0) */

@@ -26,7 +26,7 @@ __attribute__ ((__section__(".cyconfigecc"), used))
 #error "Unsupported toolchain"
 #endif
 const uint8 cy_meta_configecc[] = {
-    0x00u, 0x7Fu, 0x7Fu, 0x00u, 0x00u, 0x00u, 0x00u, 0x00u
+    0x00u
 };
 
 #if defined(__GNUC__) || defined(__ARMCC_VERSION)

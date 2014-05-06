@@ -1,6 +1,6 @@
 /*******************************************************************************
 * File Name: CySpc.c
-* Version 4.10
+* Version 4.0
 *
 * Description:
 *  Provides definitions for the System Performance Component API.
@@ -8,7 +8,7 @@
 *  application.
 *
 ********************************************************************************
-* Copyright 2008-2014, Cypress Semiconductor Corporation.  All rights reserved.
+* Copyright 2008-2013, Cypress Semiconductor Corporation.  All rights reserved.
 * You may use this file only in accordance with the license, terms, conditions,
 * disclaimers, and limitations in the end user license agreement accompanying
 * the software package with which this file was provided.
@@ -69,7 +69,7 @@ void     CySpcUnlock(void);
 #define CY_SPC_STATUS_CODE_MASK             (0xFCu)
 #define CY_SPC_STATUS_CODE_SHIFT            (0x02u)
 
-/* Status codes for SPC. */
+/* Status codes for the SPC. */
 #define CY_SPC_STATUS_SUCCESS               (0x00u)   /* Operation Successful */
 #define CY_SPC_STATUS_INVALID_ARRAY_ID      (0x01u)   /* Invalid Array ID for given command */
 #define CY_SPC_STATUS_INVALID_2BYTEKEY      (0x02u)   /* Invalid 2-byte key */
@@ -137,18 +137,7 @@ void     CySpcUnlock(void);
 
 
 /*******************************************************************************
-* The following code is OBSOLETE and must not be used.
-*
-* If the obsoleted macro definitions intended for use in the application use the
-* following scheme, redefine your own versions of these definitions:
-*    #ifdef <OBSOLETED_DEFINE>
-*        #undef  <OBSOLETED_DEFINE>
-*        #define <OBSOLETED_DEFINE>      (<New Value>)
-*    #endif
-*
-* Note: Redefine obsoleted macro definitions with caution. They might still be
-*       used in the application and their modification might lead to unexpected
-*       consequences.
+* Following code are OBSOLETE and must not be used starting from cy_boot 3.0
 *******************************************************************************/
 #define FIRST_FLASH_ARRAYID         (CY_SPC_FIRST_FLASH_ARRAYID)
 #define LAST_FLASH_ARRAYID          (CY_SPC_LAST_FLASH_ARRAYID)

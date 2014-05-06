@@ -39,6 +39,7 @@ PSoCCreatorExportIDE.xml
 *.ctl
 */codegentemp/*.*
 *project.h
+ComponentUpdateLog.txt
 
 
 
