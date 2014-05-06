@@ -1,6 +1,6 @@
 /*******************************************************************************
 * FILENAME: cytypes.h
-* Version 4.10
+* Version 4.0
 *
 *  Description:
 *  CyTypes provides register access macros and approved types for use in
@@ -12,12 +12,12 @@
 *  data the correct way.
 *
 *  Register Access macros and functions perform their operations on an
-*  input of the type pointer to void.  The arguments passed to it should be
+*  input of type pointer to void.  The arguments passed to it should be
 *  pointers to the type associated with the register size.
 *  (i.e. a "uint8 *" shouldn't be passed to obtain a 16-bit register value)
 *
 ********************************************************************************
-* Copyright 2008-2014, Cypress Semiconductor Corporation.  All rights reserved.
+* Copyright 2008-2013, Cypress Semiconductor Corporation.  All rights reserved.
 * You may use this file only in accordance with the license, terms, conditions,
 * disclaimers, and limitations in the end user license agreement accompanying
 * the software package with which this file was provided.
@@ -40,7 +40,7 @@
 
 #if defined( __ICCARM__ )
     /* Suppress warning for multiple volatile variables in an expression. */
-    /* This is common in component code and usage is not order dependent. */
+    /* This is common in component code and the usage is not order dependent. */
     #pragma diag_suppress=Pa082
 #endif  /* defined( __ICCARM__ ) */
 
@@ -86,7 +86,7 @@
 
 
 /*******************************************************************************
-*   Base Types. Acceptable types from MISRA-C specifying sign and size.
+*   Base Types. Acceptable types from MISRA-C specifying signedness and size.
 *******************************************************************************/
 typedef unsigned char   uint8;
 typedef unsigned short  uint16;
@@ -104,7 +104,7 @@ typedef          float  float32;
 
 #endif  /* (!CY_PSOC3) */
 
-/* Signed or unsigned depending on compiler selection */
+/* Signed or unsigned depending on the compiler selection */
 typedef          char   char8;
 
 
@@ -154,7 +154,7 @@ typedef          char   char8;
 
 #else
 
-    /* Prototype for function to set 24-bit register. Located at cyutils.c */
+    /* Prototype for function to set a 24-bit register. Located at cyutils.c */
     extern void     CySetReg24(uint32 volatile * addr, uint32 value);
 
     #if(CY_PSOC4)
@@ -223,12 +223,12 @@ typedef          char   char8;
 
 #if(CY_PSOC3)
 
-    /* 8051 naturally returns 8 bit value. */
+    /* 8051 naturally returns an 8 bit value. */
     typedef unsigned char cystatus;
 
 #else
 
-    /* ARM naturally returns 32 bit value. */
+    /* ARM naturally returns a 32 bit value. */
     typedef unsigned long cystatus;
 
 #endif  /* (CY_PSOC3) */
@@ -274,7 +274,7 @@ typedef volatile uint32 CYXDATA reg32;
     * KEIL for the 8051 is a big endian compiler This causes problems as the on chip
     * registers are little endian.  Byte swapping for two and four byte registers is
     * implemented in the functions below.  This will require conditional compilation
-    * of function prototypes in the code.
+    * of function prototypes in code.
     *******************************************************************************/
 
     /* Access macros for 8, 16, 24 and 32-bit registers, IN THE FIRST 64K OF XDATA */
@@ -347,24 +347,24 @@ typedef volatile uint32 CYXDATA reg32;
 *  Data manipulation defines
 *******************************************************************************/
 
-/* Get 8 bits of 16 bit value. */
+/* Get 8 bits of a 16 bit value. */
 #define LO8(x)                  ((uint8) ((x) & 0xFFu))
 #define HI8(x)                  ((uint8) ((uint16)(x) >> 8))
 
-/* Get 16 bits of 32 bit value. */
+/* Get 16 bits of a 32 bit value. */
 #define LO16(x)                 ((uint16) ((x) & 0xFFFFu))
 #define HI16(x)                 ((uint16) ((uint32)(x) >> 16))
 
-/* Swap the byte ordering of 32 bit value */
+/* Swap the byte ordering of a 32 bit value */
 #define CYSWAP_ENDIAN32(x)  \
         ((uint32)(((x) >> 24) | (((x) & 0x00FF0000u) >> 8) | (((x) & 0x0000FF00u) << 8) | ((x) << 24)))
 
-/* Swap the byte ordering of 16 bit value */
+/* Swap the byte ordering of a 16 bit value */
 #define CYSWAP_ENDIAN16(x)      ((uint16)(((x) << 8) | ((x) >> 8)))
 
 
 /*******************************************************************************
-* Defines the standard return values used the PSoC content. A function is
+* Defines the standard return values used PSoC content. A function is
 * not limited to these return values but can use them when returning standard
 * error values. Return values can be overloaded if documented in the function
 * header. On the 8051 a function can use a larger return type but still use the
@@ -413,19 +413,9 @@ typedef volatile uint32 CYXDATA reg32;
 
 
 /*******************************************************************************
-* The following code is OBSOLETE and must not be used starting from cy_boot 3.10
-*
-* If the obsoleted macro definitions intended for use in the application use the
-* following scheme, redefine your own versions of these definitions:
-*    #ifdef <OBSOLETED_DEFINE>
-*        #undef  <OBSOLETED_DEFINE>
-*        #define <OBSOLETED_DEFINE>      (<New Value>)
-*    #endif
-*
-* Note: Redefine obsoleted macro definitions with caution. They might still be
-*       used in the application and their modification might lead to unexpected
-*       consequences.
+* Following code are OBSOLETE and must not be used starting from cy_boot 3.10
 *******************************************************************************/
+
 /* Device is PSoC 3 and the revision is ES2 or earlier */
 #define CY_PSOC3_ES2 ((CYDEV_CHIP_MEMBER_USED == CYDEV_CHIP_MEMBER_3A) && \
     (CYDEV_CHIP_REVISION_USED <= CYDEV_CHIP_REVISION_3A_ES2))

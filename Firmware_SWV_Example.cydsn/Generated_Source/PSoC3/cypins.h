@@ -1,9 +1,9 @@
 /*******************************************************************************
 * File Name: cypins.h
-* Version 4.10
+* Version 4.0
 *
 *  Description:
-*   This file contains the function prototypes and constants used for a port/pin
+*   This file contains the function prototypes and constants used for port/pin
 *   in access and control.
 *
 *  Note:
@@ -11,7 +11,7 @@
 *   System Reference Guide provided with PSoC Creator.
 *
 ********************************************************************************
-* Copyright 2008-2014, Cypress Semiconductor Corporation.  All rights reserved.
+* Copyright 2008-2013, Cypress Semiconductor Corporation.  All rights reserved.
 * You may use this file only in accordance with the license, terms, conditions,
 * disclaimers, and limitations in the end user license agreement accompanying
 * the software package with which this file was provided.
@@ -193,7 +193,7 @@
 *
 *
 * Return:
-*   mode:  The current drive mode for the pin
+*   mode:  Current drive mode for the pin
 *
 *   Define                Source
 *   PIN_DM_ALG_HIZ        Analog HiZ
@@ -214,7 +214,7 @@
 ********************************************************************************
 *
 * Summary:
-*  Set the slew rate for the pin to fast the edge rate.
+*  Set the slew rate for the pin to fast edge rate.
 *  Note that this only applies for pins in strong output drive modes,
 *  not to resistive drive modes.
 *
@@ -239,7 +239,7 @@
 ********************************************************************************
 *
 * Summary:
-*  Set the slew rate for the pin to slow the edge rate.
+*  Set the slew rate for the pin to slow edge rate.
 *  Note that this only applies for pins in strong output drive modes,
 *  not to resistive drive modes.
 *
@@ -259,18 +259,7 @@
 
 
 /*******************************************************************************
-* The following code is OBSOLETE and must not be used.
-*
-* If the obsoleted macro definitions intended for use in the application use the
-* following scheme, redefine your own versions of these definitions:
-*    #ifdef <OBSOLETED_DEFINE>
-*        #undef  <OBSOLETED_DEFINE>
-*        #define <OBSOLETED_DEFINE>      (<New Value>)
-*    #endif
-*
-* Note: Redefine obsoleted macro definitions with caution. They might still be
-*       used in the application and their modification might lead to unexpected
-*       consequences.
+* Following code are OBSOLETE and must not be used starting from cy_boot 3.30
 *******************************************************************************/
 #define PC_DRIVE_MODE_SHIFT (CY_PINS_PC_DRIVE_MODE_SHIFT)
 #define PC_DRIVE_MODE_MASK  (CY_PINS_PC_DRIVE_MODE_MASK)

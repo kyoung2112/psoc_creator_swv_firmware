@@ -1,6 +1,6 @@
 /*******************************************************************************
 * File Name: PSoC3_8051.h
-* Version 4.10
+* Version 4.0
 *
 *  Description:
 *   8051 register definitions for the PSoC3 family of parts.

@@ -53,9 +53,10 @@
 #define SWV_ENA			0x10		/* TRACE_CTL: Enable SWV behavior */
 #define SWV_CLK_ENA			0x04	/* MLOGIC_DEBUG, enable SWV clk  */
 #define SWV_CLK_CPU_DIV_2	0x08	/* MLOGIC_DEBUG, set SWV clk to CPU/2 */
+#define SWV_CLK			6000u		/* The software requires SWV_CLK = 6000 kHz */
 
 #define SYNC_COUNT		0x0100		//0x07AF
-#define BAUD_DIVISOR	0x0000
+#define BAUD_DIVISOR	0x0000		//Serial output bit rate is SWV src clk / (BAUD_DIVISOR + 1)
 
 #if !(CY_PSOC3)
 /* PSoC5LP SWV stimulus register defines */
@@ -67,16 +68,30 @@
 
 void CySwvEnable()
 {
+	uint8 clkdiv;
+	
 	/* Enable serial wire viewer (SWV) on PSoC3 or PSoC5LP */
-		
+	
+	/* Assuming SWV_CLK is CPU CLK (bus clk) / 2. Need to configure divider to output the right freq 
+	Include a warning if the divider does not produce the exact frequency required */
+	#if (BCLK__BUS_CLK__KHZ % (2u*SWV_CLK)) == 0
+	clkdiv = (BCLK__BUS_CLK__KHZ / (2u*SWV_CLK))-1;	
+	#else
+	/* BUS CLK / 2 must be able to be divided down with an integer value to reach SWV_CLK 
+	To fix, either change your BUS CLK or change your SWV divider (might require a change
+	to your PC application to change the Miniprog3 clock frequency) */
+	#warning Accurate SWV divider could not be reached.
+	#endif
+	clkdiv = (BCLK__BUS_CLK__KHZ / (2u*SWV_CLK))-1;	
+	
     #if CY_PSOC3
 	/* Set up SWV serial output for PSOC3 */
 	// Derive the SWV clock from bus clock / 2
 	CY_SET_XTND_REG8(CYREG_MLOGIC_DEBUG, (CY_GET_XTND_REG8(CYREG_MLOGIC_DEBUG) | 0x0D));
 	
 	//Set Output Divisor Register (13 bits)
-	CY_SET_REG8(CYDEV_SWV_SWO_CAOSD + 1, (uint8)(BAUD_DIVISOR >> 8));
-	CY_SET_REG8(CYDEV_SWV_SWO_CAOSD + 0, (uint8)BAUD_DIVISOR);
+	CY_SET_REG8(CYDEV_SWV_SWO_CAOSD + 1, (uint8)(clkdiv >> 8));
+	CY_SET_REG8(CYDEV_SWV_SWO_CAOSD + 0, (uint8)(clkdiv));
 	
 	//Setup the output encoding style
 	CY_SET_REG8(CYDEV_SWV_SWO_SPP, ENCODING_USE);
@@ -108,9 +123,9 @@ void CySwvEnable()
 	
 	//Enable ITM
 	CY_SET_REG32(CYDEV_ITM_TRACE_CTRL, (uint32) (SWV_ENA | ITM_ENA | SYNC_ENA));
+
 	//Set Output Divisor Register (13 bits)
-	CY_SET_REG8(CYDEV_TPIU_ASYNC_CLK_PRESCALER + 1, (uint8)(BAUD_DIVISOR >> 8));
-	CY_SET_REG8(CYDEV_TPIU_ASYNC_CLK_PRESCALER + 0, (uint8)BAUD_DIVISOR);	
+	CY_SET_REG32(CYDEV_TPIU_ASYNC_CLK_PRESCALER,(uint32)(clkdiv));
 
 	//Setup the output encoding style
 	CY_SET_REG8(CYDEV_TPIU_PROTOCOL, ENCODING_USE);

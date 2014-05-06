@@ -1,12 +1,12 @@
 ;*******************************************************************************
 ; FILENAME: KeilStart.a51
-; Version 4.10
+; Version 4.0
 ;
 ;  DESCRIPTION:
 ;   Bootup Code for PSoC3 chips using the Keil toolchain.
 ;
 ;*******************************************************************************
-; Copyright 2008-2014, Cypress Semiconductor Corporation.  All rights reserved.
+; Copyright 2008-2013, Cypress Semiconductor Corporation.  All rights reserved.
 ; You may use this file only in accordance with the license, terms, conditions,
 ; disclaimers, and limitations in the end user license agreement accompanying
 ; the software package with which this file was provided.
@@ -133,10 +133,10 @@ ENDIF
 
 IF (CYDEV_CHIP_REVISION_USED > CYDEV_CHIP_REVISION_3A_ES2)
   IF (CYDEV_PROJ_TYPE <> CYDEV_PROJ_TYPE_LOADABLE)
-           ; Handles the  case where Software Reset is needed in order to ensure NVLs have been setup properly on TO5
-           ; R0 - Used to indicate the Debugger Attached
-           ; R1 - Used to hold the CYREG_MLOGIC_REV_ID value
-           ; R2 - Used to hold the CYREG_RESET_SR0 value (saved in CyResetStatus after clear RAM),
+           ; Handle case where Software Reset is needed in order to ensure NVLs have been setup properly on TO5
+           ; R0 - Used to indicate Debugger Attached
+           ; R1 - Used to hold CYREG_MLOGIC_REV_ID value
+           ; R2 - Used to hold CYREG_RESET_SR0 value (saved in CyResetStatus after clear RAM),
            ;      also used by cybtldrhelper.a51
 
            mov      DPTR, #CYREG_MLOGIC_REV_ID
@@ -182,7 +182,7 @@ ENDIF
        mov      sp, #?STACK-1                       ; Set the stack pointer.
 
 IF CYDEV_BOOTLOADER_ENABLE <> 0
-       ;* Checks if there is a need to start a loadable application, bootloaders always do this check first so
+       ;* check if need to start loadable application, bootloaders always do this check first so
        ;* that the device does not get configured before we launch the user application which
        ;* has its own unique configuration
        lcall    CyBtldr_CheckLaunch

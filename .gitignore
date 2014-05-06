@@ -40,6 +40,10 @@ PSoCCreatorExportIDE.xml
 */codegentemp/*.*
 *project.h
 ComponentUpdateLog.txt
+DP8051/
+*.uvopt
+*.uvproj
+post_link.bat
 
 
 
