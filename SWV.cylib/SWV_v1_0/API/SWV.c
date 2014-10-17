@@ -3,10 +3,10 @@
 * Version `$CY_MAJOR_VERSION`.`$CY_MINOR_VERSION`
 *
 * Description:
-*  Provides the source code to the API for the EEPROM component.
+*  Provides the source code to the API for the Serial Wire Viewer component.
 *
 ********************************************************************************
-* Copyright 2008-2012, Cypress Semiconductor Corporation.  All rights reserved.
+* Copyright 2008-2014, Cypress Semiconductor Corporation.  All rights reserved.
 * You may use this file only in accordance with the license, terms, conditions,
 * disclaimers, and limitations in the end user license agreement accompanying
 * the software package with which this file was provided.
@@ -42,7 +42,7 @@ void `$INSTANCE_NAME`_Start(void)
 	/* BUS CLK / 2 must be able to be divided down with an integer value to reach SWV_CLK 
 	To fix, either change your BUS CLK or change your SWV divider (might require a change
 	to your PC application to change the Miniprog3 clock frequency) */
-	#warning Accurate SWV divider could not be reached.
+	#warning Accurate SWV divider could not be reached. BUS CLK / 2 must be able to be divided down with an integer value to reach SWV_CLK.
 	#endif
 	clkdiv = (BCLK__BUS_CLK__KHZ / (2u*SWV_CLK))-1;	
 	
