@@ -42,13 +42,13 @@
 
 int main(void)
 {
-	uint32 i;
+	uint32 i=0;
 	
     SWV_Start();
 	
 	while (1)
 	{
-		printf("\r\nTest count:%ld",i++);
+		printf("\r\nTest count:%lu",i++);
 		CyDelay(1000);
 	}
 }
