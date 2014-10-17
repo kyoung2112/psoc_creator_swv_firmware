@@ -2,7 +2,7 @@
 
 This is an example PSoC Creator SWV Printf firmware example for PSoC3 and PSoC5LP. The PSoC3 example targets the CY8C3866AXI-040 (CY8CKIT-001 or CY8CKIT-030) and the PSoC5LP example targets the CY8C5858AXI-LP035(CY8CKIT-001 or CY8CKIT-050). 
 
-Serial Wire Viewer (SWV) is now implemented as a component. The component is entirely contained within the xxx project subdirectory. To add this component to your project, copy the directory to your project and then add the component project as a user dependency to your project (Project->Dependencies). The "Serial Wire Viewer" component will show up in the Cypress Component Catalog under the "System" group. 
+Serial Wire Viewer (SWV) is now implemented as a component. The component is entirely contained within SWV.cylib project subdirectory in the workspace. To add this component to your project, copy the directory to your project and then add the component project as a user dependency to your project (Project->Dependencies). The "Serial Wire Viewer" component will show up in the Cypress Component Catalog under the "System" group. 
 
 The only API is SWV_Start(), which needs to be called before using. The current functionality redirects the printf() function for PSoC3 (Keil 8051 compiler) and PSoC5LP (gcc) to transmit bytes to the SWV stimulus port 0. Defines are included to change between manchester and UART. The output frequency is determined by a #define in the component code.
 
